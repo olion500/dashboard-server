@@ -10,10 +10,10 @@ export class DatabaseConfiguration implements TypeOrmOptionsFactory {
       password: process.env.POSTGRES_PASSWORD,
       database: process.env.POSTGRES_DATABASE,
 
-      entities: [process.env.TYPEORM_ENTITIES],
-      logging: true,
+      logging: false,
       synchronize: true, // TODO: this should be false when production.
       migrations: [process.env.TYPEORM_MIGRATIONS],
+      autoLoadEntities: true,
     };
   }
 }

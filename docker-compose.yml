@@ -9,3 +9,4 @@ services:
     environment:
       POSTGRES_USER: "coval"
       POSTGRES_PASSWORD: "coval123"
+      POSTGRES_DB: "dashboard"
