@@ -6,6 +6,7 @@ import { EstimateSheetsModule } from './estimate_sheets/estimate_sheets.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { DatabaseConfiguration } from './database.configuration';
 import { OptionsModule } from './options/options.module';
+import { ProductsModule } from './products/products.module';
 
 @Module({
   imports: [
@@ -15,6 +16,7 @@ import { OptionsModule } from './options/options.module';
     }),
     EstimateSheetsModule,
     OptionsModule,
+    ProductsModule,
   ],
   controllers: [AppController],
   providers: [AppService],
