@@ -5,7 +5,7 @@ import { AppModule } from '../src/app.module';
 
 describe('E2E Test:: Estimate-sheet', () => {
   let app: INestApplication;
-  const url = '/estimate-sheets';
+  const url = '/options';
 
   beforeEach(async () => {
     const moduleFixture: TestingModule = await Test.createTestingModule({
@@ -16,23 +16,35 @@ describe('E2E Test:: Estimate-sheet', () => {
     await app.init();
   });
 
-  it('POST', () => {
+  it('POST group', () => {
     return request(app.getHttpServer())
       .post(url)
       .send({
-        estimateNo: 'NFN-220102',
-        name: '인식표',
-        estimatedAt: '2022-10-19',
-        companyName: 'pet',
-        companyId: '1717-45-1232',
-        companyCEO: '김홍일',
-        totalCost: 123000,
-        url: 'https://asdf.com',
+        name: '펠트색상',
       })
       .expect(201);
   });
 
-  it('GET', async () => {
+  it('POST option', () => {
+    return request(app.getHttpServer())
+      .post(`${url}/1`)
+      .send({
+        name: '검은색',
+        image: 'www.naver.com',
+      })
+      .expect(201);
+  });
+
+  it('PATCH option', () => {
+    return request(app.getHttpServer())
+      .patch(`${url}/1`)
+      .send({
+        count: 10,
+      })
+      .expect(200);
+  });
+
+  it('GET group', async () => {
     const result = await request(app.getHttpServer()).get(url).expect(200);
     console.log(JSON.stringify(result.body, null, 2));
   });

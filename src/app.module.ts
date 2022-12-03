@@ -5,6 +5,7 @@ import { AppService } from './app.service';
 import { EstimateSheetsModule } from './estimate_sheets/estimate_sheets.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { DatabaseConfiguration } from './database.configuration';
+import { OptionsModule } from './options/options.module';
 
 @Module({
   imports: [
@@ -13,6 +14,7 @@ import { DatabaseConfiguration } from './database.configuration';
       useClass: DatabaseConfiguration,
     }),
     EstimateSheetsModule,
+    OptionsModule,
   ],
   controllers: [AppController],
   providers: [AppService],
