@@ -6,6 +6,7 @@ import { Option } from './entities/option.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { OptionGroup } from './entities/option_group.entity';
 import { CreateOptionGroupDto } from './dto/create-option-group-dto';
+import { fullImagePath } from '../common/utils/image.utils';
 
 @Injectable()
 export class OptionsService {
@@ -21,8 +22,13 @@ export class OptionsService {
     return await this.optionGroupRepository.save(data);
   }
 
-  async create(optionGroupId: number, createOptionDto: CreateOptionDto) {
+  async create(
+    optionGroupId: number,
+    file: Express.Multer.File,
+    createOptionDto: CreateOptionDto,
+  ) {
     const option = new Option(createOptionDto);
+    option.image = fullImagePath('options', file.filename);
     await this.optionRepository.save(option);
 
     const optionGroup = await this.findOneGroup(optionGroupId);

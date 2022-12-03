@@ -26,12 +26,12 @@ describe('E2E Test:: Estimate-sheet', () => {
   });
 
   it('POST option', () => {
+    const buffer = Buffer.from('test data');
+
     return request(app.getHttpServer())
       .post(`${url}/1`)
-      .send({
-        name: '검은색',
-        image: 'www.naver.com',
-      })
+      .attach('image', buffer, 'test_file.txt')
+      .field('name', '검은색')
       .expect(201);
   });
 

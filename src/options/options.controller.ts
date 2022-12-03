@@ -6,11 +6,15 @@ import {
   Patch,
   Param,
   Delete,
+  UseInterceptors,
+  UploadedFile,
 } from '@nestjs/common';
 import { OptionsService } from './options.service';
 import { CreateOptionDto } from './dto/create-option.dto';
 import { UpdateOptionDto } from './dto/update-option.dto';
 import { CreateOptionGroupDto } from './dto/create-option-group-dto';
+import { multerOptions } from '../common/utils/image.utils';
+import { FileInterceptor } from '@nestjs/platform-express';
 
 @Controller('options')
 export class OptionsController {
@@ -22,11 +26,13 @@ export class OptionsController {
   }
 
   @Post(':id')
+  @UseInterceptors(FileInterceptor('image', multerOptions('options')))
   createOption(
     @Param('id') id: string,
+    @UploadedFile() file: Express.Multer.File,
     @Body() createOptionDto: CreateOptionDto,
   ) {
-    return this.optionsService.create(+id, createOptionDto);
+    return this.optionsService.create(+id, file, createOptionDto);
   }
 
   @Get()
