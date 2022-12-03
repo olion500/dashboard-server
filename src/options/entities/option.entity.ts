@@ -1,4 +1,11 @@
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  CreateDateColumn,
+  Entity,
+  ManyToOne,
+  PrimaryGeneratedColumn,
+  UpdateDateColumn,
+} from 'typeorm';
 import { OptionGroup } from './option_group.entity';
 
 @Entity()
@@ -19,6 +26,12 @@ export class Option {
 
   @ManyToOne(() => OptionGroup, (optionGroup) => optionGroup.options)
   optionGroup: OptionGroup;
+
+  @CreateDateColumn()
+  createdAt: Date;
+
+  @UpdateDateColumn()
+  updatedAt: Date;
 
   constructor(partial: Partial<Option>) {
     Object.assign(this, partial);
