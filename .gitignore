@@ -36,3 +36,5 @@ lerna-debug.log*
 
 # Uploaded Image folder for test
 /src/uploads
+
+.env
