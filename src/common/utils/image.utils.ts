@@ -6,19 +6,19 @@ import { v4 as uuidv4 } from 'uuid';
 
 const createFolder = (folder: string) => {
   try {
-    console.log('💾 Create a root uploads folder...');
+    // console.log('💾 Create a root uploads folder...');
 
     fs.mkdirSync(path.join(__dirname, '../..', `uploads`)); //폴더를 만드는 명령어
   } catch (error) {
-    console.log('The folder already exists...');
+    // console.log('The folder already exists...');
   }
 
   try {
-    console.log(`💾 Create a ${folder} uploads folder...`);
+    // console.log(`💾 Create a ${folder} uploads folder...`);
 
     fs.mkdirSync(path.join(__dirname, '../..', `uploads/${folder}`)); //폴더 생성
   } catch (error) {
-    console.log(`The ${folder} folder already exists...`);
+    // console.log(`The ${folder} folder already exists...`);
   }
 };
 
