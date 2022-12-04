@@ -25,19 +25,24 @@ describe('E2E Test:: Options', () => {
       .expect(201);
   });
 
-  it('POST option', () => {
+  it('POST option', async () => {
     const buffer = Buffer.from('test data');
+    const response = await request(app.getHttpServer()).get(url);
+    const id = response.body[0].id;
 
     return request(app.getHttpServer())
-      .post(`${url}/1`)
+      .post(`${url}/${id}`)
       .attach('image', buffer, 'test_file.txt')
       .field('name', '검은색')
       .expect(201);
   });
 
-  it('PATCH option', () => {
+  it('PATCH option', async () => {
+    const response = await request(app.getHttpServer()).get(url);
+    const id = response.body[0].id;
+
     return request(app.getHttpServer())
-      .patch(`${url}/1`)
+      .patch(`${url}/${id}`)
       .send({
         count: 10,
       })
