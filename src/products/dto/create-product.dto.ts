@@ -17,4 +17,12 @@ export class CreateProductDto {
   @ApiProperty()
   @IsInt()
   option2: number;
+
+  @ApiProperty()
+  @IsString()
+  designType: string;
+
+  @ApiProperty()
+  @IsString()
+  productType: string;
 }

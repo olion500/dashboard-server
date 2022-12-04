@@ -22,6 +22,18 @@ export class Product {
   @Column()
   image: string;
 
+  // text_1line | text_3line
+  @Column({
+    nullable: true,
+  })
+  designType: string;
+
+  // wapen | tag
+  @Column({
+    nullable: true,
+  })
+  productType: string;
+
   @OneToMany(() => ProductOption, (productOption) => productOption.product, {
     createForeignKeyConstraints: false,
   })

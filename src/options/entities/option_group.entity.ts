@@ -17,6 +17,11 @@ export class OptionGroup {
   @Column()
   name: string;
 
+  @Column({
+    nullable: true,
+  })
+  placeholder: string;
+
   @OneToMany(() => Option, (option) => option.optionGroup, {
     createForeignKeyConstraints: false,
   })
@@ -35,5 +40,6 @@ export class OptionGroup {
 
   constructor(partial: Partial<OptionGroup>) {
     Object.assign(this, partial);
+    this.placeholder = `${this.name} 선택`;
   }
 }

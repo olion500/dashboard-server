@@ -27,6 +27,8 @@ describe('E2E Test:: Product', () => {
         'description',
         '귀여운 우리 아이 얼굴로 커스텀할 수 있는 산책와펜입니다.',
       )
+      .field('designType', 'text_1line')
+      .field('productType', 'wapen')
       .expect(201);
   });
 
