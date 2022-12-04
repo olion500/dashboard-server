@@ -8,6 +8,7 @@ import {
   Delete,
   UseInterceptors,
   UploadedFile,
+  ValidationPipe,
 } from '@nestjs/common';
 import { ProductsService } from './products.service';
 import { CreateProductDto } from './dto/create-product.dto';
@@ -22,7 +23,7 @@ export class ProductsController {
   @Post()
   @UseInterceptors(FileInterceptor('image', multerOptions('products')))
   create(
-    @UploadedFile() file: Express.Multer.File,
+    @UploadedFile(new ValidationPipe()) file: Express.Multer.File,
     @Body() createProductDto: CreateProductDto,
   ) {
     return this.productsService.create(file, createProductDto);

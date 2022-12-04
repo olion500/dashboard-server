@@ -8,6 +8,7 @@ import {
   Delete,
   UseInterceptors,
   UploadedFile,
+  ValidationPipe,
 } from '@nestjs/common';
 import { OptionsService } from './options.service';
 import { CreateOptionDto } from './dto/create-option.dto';
@@ -29,7 +30,7 @@ export class OptionsController {
   @UseInterceptors(FileInterceptor('image', multerOptions('options')))
   createOption(
     @Param('id') id: string,
-    @UploadedFile() file: Express.Multer.File,
+    @UploadedFile(new ValidationPipe()) file: Express.Multer.File,
     @Body() createOptionDto: CreateOptionDto,
   ) {
     return this.optionsService.create(+id, file, createOptionDto);
