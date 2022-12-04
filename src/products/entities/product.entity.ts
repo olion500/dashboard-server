@@ -22,7 +22,9 @@ export class Product {
   @Column()
   image: string;
 
-  @OneToMany(() => ProductOption, (productOption) => productOption.product)
+  @OneToMany(() => ProductOption, (productOption) => productOption.product, {
+    createForeignKeyConstraints: false,
+  })
   productOptions: ProductOption[];
 
   @CreateDateColumn()

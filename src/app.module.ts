@@ -7,6 +7,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { DatabaseConfiguration } from './database.configuration';
 import { OptionsModule } from './options/options.module';
 import { ProductsModule } from './products/products.module';
+import { SeedsModule } from './seeds/seeds.module';
 
 @Module({
   imports: [
@@ -17,6 +18,7 @@ import { ProductsModule } from './products/products.module';
     EstimateSheetsModule,
     OptionsModule,
     ProductsModule,
+    SeedsModule,
   ],
   controllers: [AppController],
   providers: [AppService],

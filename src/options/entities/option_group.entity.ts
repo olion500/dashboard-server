@@ -17,10 +17,14 @@ export class OptionGroup {
   @Column()
   name: string;
 
-  @OneToMany(() => Option, (option) => option.optionGroup)
+  @OneToMany(() => Option, (option) => option.optionGroup, {
+    createForeignKeyConstraints: false,
+  })
   options: Option[];
 
-  @OneToMany(() => ProductOption, (productOption) => productOption.option)
+  @OneToMany(() => ProductOption, (productOption) => productOption.option, {
+    createForeignKeyConstraints: false,
+  })
   productOptions: ProductOption[];
 
   @CreateDateColumn()

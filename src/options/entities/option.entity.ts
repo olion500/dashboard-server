@@ -16,7 +16,9 @@ export class Option {
   @Column()
   name: string;
 
-  @Column()
+  @Column({
+    nullable: true,
+  })
   image: string;
 
   @Column({
@@ -24,7 +26,9 @@ export class Option {
   })
   count: number;
 
-  @ManyToOne(() => OptionGroup, (optionGroup) => optionGroup.options)
+  @ManyToOne(() => OptionGroup, (optionGroup) => optionGroup.options, {
+    createForeignKeyConstraints: false,
+  })
   optionGroup: OptionGroup;
 
   @CreateDateColumn()

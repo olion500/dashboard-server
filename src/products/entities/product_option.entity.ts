@@ -19,10 +19,14 @@ export class ProductOption {
   })
   consume: number;
 
-  @ManyToOne(() => Product, (product) => product.productOptions)
+  @ManyToOne(() => Product, (product) => product.productOptions, {
+    createForeignKeyConstraints: false,
+  })
   product: Product;
 
-  @ManyToOne(() => OptionGroup, (optionGroup) => optionGroup.productOptions)
+  @ManyToOne(() => OptionGroup, (optionGroup) => optionGroup.productOptions, {
+    createForeignKeyConstraints: false,
+  })
   option: OptionGroup;
 
   @CreateDateColumn()
