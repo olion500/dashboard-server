@@ -41,12 +41,13 @@ export class ProductsService {
   }
 
   findAll() {
-    return this.productRepository
-      .createQueryBuilder('product')
-      .leftJoinAndSelect('product.productOptions', 'productOptions')
-      .leftJoinAndSelect('productOptions.option', 'optionGroup')
-      .leftJoinAndSelect('optionGroup.options', 'options')
-      .getMany();
+    return this.productRepository.find();
+    // return this.productRepository
+    //   .createQueryBuilder('product')
+    //   .leftJoinAndSelect('product.productOptions', 'productOptions')
+    //   .leftJoinAndSelect('productOptions.option', 'optionGroup')
+    //   .leftJoinAndSelect('optionGroup.options', 'options')
+    //   .getMany();
   }
 
   findOne(id: number) {
