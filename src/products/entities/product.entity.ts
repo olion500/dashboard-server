@@ -2,9 +2,11 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
+import { ProductOption } from './product_option.entity';
 
 @Entity()
 export class Product {
@@ -19,6 +21,9 @@ export class Product {
 
   @Column()
   image: string;
+
+  @OneToMany(() => ProductOption, (productOption) => productOption.product)
+  productOptions: ProductOption[];
 
   @CreateDateColumn()
   createdAt: Date;

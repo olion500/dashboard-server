@@ -50,6 +50,14 @@ export class OptionsService {
     });
   }
 
+  findFontColorGroup() {
+    return this.optionGroupRepository.findOneBy({ name: '글자색상' });
+  }
+
+  findFontGroup() {
+    return this.optionGroupRepository.findOneBy({ name: '글씨체' });
+  }
+
   update(id: number, updateOptionDto: UpdateOptionDto) {
     return this.optionRepository.update(id, updateOptionDto);
   }

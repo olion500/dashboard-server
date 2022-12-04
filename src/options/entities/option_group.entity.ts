@@ -7,6 +7,7 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 import { Option } from './option.entity';
+import { ProductOption } from '../../products/entities/product_option.entity';
 
 @Entity()
 export class OptionGroup {
@@ -18,6 +19,9 @@ export class OptionGroup {
 
   @OneToMany(() => Option, (option) => option.optionGroup)
   options: Option[];
+
+  @OneToMany(() => ProductOption, (productOption) => productOption.option)
+  productOptions: ProductOption[];
 
   @CreateDateColumn()
   createdAt: Date;
