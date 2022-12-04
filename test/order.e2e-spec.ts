@@ -21,7 +21,13 @@ describe('E2E Test:: Order', () => {
 
     return request(app.getHttpServer())
       .post(url)
-      .field('name', 'asdf')
+      .attach('image', buffer, 'test_file.txt')
+      .attach('image', buffer, 'test_file2.txt')
+      .field('name', '김다혜')
+      .field('phone', '010-1234-5432')
+      .field('purchase_site', '네이버자사몰')
+      .field('options', 1)
+      .field('options', 2)
       .expect(201);
   });
 

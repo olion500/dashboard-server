@@ -20,8 +20,8 @@ export class Order {
   @Column()
   purchase_site: string;
 
-  // @Column('text', { array: true })
-  // images: string[];
+  @Column('text', { array: true, nullable: true })
+  images: string[];
 
   @Column({
     default: 'in_progress',
@@ -33,8 +33,8 @@ export class Order {
   })
   completedAt: Date;
 
-  // @Column('int', { array: true })
-  // options: number[];
+  @Column('int', { array: true, nullable: true })
+  options: number[];
 
   @CreateDateColumn()
   createdAt: Date;

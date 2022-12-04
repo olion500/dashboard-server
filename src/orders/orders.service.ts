@@ -14,9 +14,8 @@ export class OrdersService {
   ) {}
 
   async create(files: Express.Multer.File[], createOrderDto: CreateOrderDto) {
-    console.log(createOrderDto);
     const initOrder = new Order(createOrderDto);
-    // initOrder.images = files.map((f) => fullImagePath('orders', f.filename));
+    initOrder.images = files.map((f) => fullImagePath('orders', f.filename));
     return await this.orderRepository.save(initOrder);
   }
 

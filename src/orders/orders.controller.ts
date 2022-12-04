@@ -6,18 +6,27 @@ import {
   Patch,
   Param,
   Delete,
+  ValidationPipe,
+  UseInterceptors,
+  UploadedFiles,
 } from '@nestjs/common';
 import { OrdersService } from './orders.service';
 import { CreateOrderDto } from './dto/create-order.dto';
 import { UpdateOrderDto } from './dto/update-order.dto';
+import { FileInterceptor, FilesInterceptor } from '@nestjs/platform-express';
+import { multerOptions } from '../common/utils/image.utils';
 
 @Controller('orders')
 export class OrdersController {
   constructor(private readonly ordersService: OrdersService) {}
 
   @Post()
-  create(@Body() createOrderDto: CreateOrderDto) {
-    return this.ordersService.create([], createOrderDto);
+  @UseInterceptors(FilesInterceptor('image', 3, multerOptions('orders')))
+  create(
+    @UploadedFiles() files: Express.Multer.File[],
+    @Body(new ValidationPipe()) createOrderDto: CreateOrderDto,
+  ) {
+    return this.ordersService.create(files, createOrderDto);
   }
 
   @Get()

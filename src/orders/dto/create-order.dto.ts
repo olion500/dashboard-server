@@ -1,10 +1,10 @@
-import { IsNotEmpty, IsString } from 'class-validator';
+import { IsArray, IsString } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 
 export class CreateOrderDto {
   @ApiProperty()
   @IsString()
-  sum: string;
+  name: string;
 
   @ApiProperty()
   @IsString()
@@ -14,7 +14,7 @@ export class CreateOrderDto {
   @IsString()
   purchase_site: string;
 
-  // @ApiProperty()
-  // @IsArray()
-  // options: number[];
+  @ApiProperty()
+  @IsArray()
+  options: number[];
 }
