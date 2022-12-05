@@ -11,11 +11,9 @@ export class CreateProductDto {
   description: string;
 
   @ApiProperty()
-  @IsInt()
   option1: number;
 
   @ApiProperty()
-  @IsInt()
   option2: number;
 
   @ApiProperty()
