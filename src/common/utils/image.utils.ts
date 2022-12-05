@@ -53,5 +53,5 @@ export const multerOptions = (folder: string) => {
 };
 
 export const fullImagePath = (folder: string, filename: string) => {
-  return path.join(process.env.IMAGE_FOLDER_PREFIX, folder, filename);
+  return process.env.IMAGE_FOLDER_PREFIX + path.join(folder, filename);
 };
