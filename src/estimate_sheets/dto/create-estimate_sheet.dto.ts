@@ -1,5 +1,6 @@
 import { IsDate, IsInt, IsString } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
+import { Type } from 'class-transformer';
 
 export class CreateEstimateSheetDto {
   @ApiProperty()
@@ -12,6 +13,7 @@ export class CreateEstimateSheetDto {
 
   @ApiProperty()
   @IsDate()
+  @Type(() => Date)
   estimatedAt: Date;
 
   @ApiProperty()
