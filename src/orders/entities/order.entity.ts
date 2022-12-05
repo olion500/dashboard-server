@@ -3,6 +3,7 @@ import {
   CreateDateColumn,
   Entity,
   JoinColumn,
+  ManyToOne,
   OneToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
@@ -36,8 +37,9 @@ export class Order {
   })
   completedAt: Date;
 
-  @OneToOne(() => Product)
-  @JoinColumn()
+  @ManyToOne(() => Product, {
+    createForeignKeyConstraints: false,
+  })
   product: Product;
 
   @Column('int', { array: true, nullable: true })
