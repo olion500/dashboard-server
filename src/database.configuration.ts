@@ -11,7 +11,7 @@ export class DatabaseConfiguration implements TypeOrmOptionsFactory {
       database: process.env.POSTGRES_DATABASE,
 
       logging: false,
-      synchronize: false, // TODO: this should be false when production.
+      synchronize: true, // TODO: this should be false when production.
       migrations: [process.env.TYPEORM_MIGRATIONS],
       autoLoadEntities: true,
     };
