@@ -11,7 +11,7 @@ async function bootstrap() {
 
   //http://localhsot:8000/media/cats/aaa.png
   //prefix 는 static파일앞에 /media를 붙여준다.
-  app.useStaticAssets(path.join(__dirname, 'uploads'), {
+  app.useStaticAssets(path.join(__dirname, '..', 'uploads'), {
     prefix: '/media',
   });
 
