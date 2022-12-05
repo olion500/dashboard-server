@@ -15,6 +15,9 @@ export class CreateOrderDto {
   purchase_site: string;
 
   @ApiProperty()
+  product_id: number;
+
+  @ApiProperty()
   @IsArray()
   options: number[];
 }

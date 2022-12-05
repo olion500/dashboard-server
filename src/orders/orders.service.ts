@@ -5,22 +5,34 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Order } from './entities/order.entity';
 import { fullImagePath } from '../common/utils/image.utils';
+import { Product } from '../products/entities/product.entity';
 
 @Injectable()
 export class OrdersService {
   constructor(
     @InjectRepository(Order)
     private orderRepository: Repository<Order>,
+    @InjectRepository(Product)
+    private readonly productRepository: Repository<Product>,
   ) {}
 
   async create(files: Express.Multer.File[], createOrderDto: CreateOrderDto) {
     const initOrder = new Order(createOrderDto);
     initOrder.images = files.map((f) => fullImagePath('orders', f.filename));
+
+    initOrder.product = await this.productRepository.findOneBy({
+      id: createOrderDto.product_id,
+    });
+
     return await this.orderRepository.save(initOrder);
   }
 
   findAll() {
-    return this.orderRepository.find();
+    return this.orderRepository.find({
+      relations: {
+        product: true,
+      },
+    });
   }
 
   findOne(id: number) {

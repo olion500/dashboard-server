@@ -16,8 +16,10 @@ describe('E2E Test:: Order', () => {
     await app.init();
   });
 
-  it('POST', () => {
+  it('POST', async () => {
     const buffer = Buffer.from('test data');
+    const response = await request(app.getHttpServer()).get('/products');
+    const productId = response.body[0].id;
 
     return request(app.getHttpServer())
       .post(url)
@@ -26,6 +28,7 @@ describe('E2E Test:: Order', () => {
       .field('name', '김다혜')
       .field('phone', '010-1234-5432')
       .field('purchase_site', '네이버자사몰')
+      .field('product_id', productId)
       .field('options', 1)
       .field('options', 2)
       .expect(201);

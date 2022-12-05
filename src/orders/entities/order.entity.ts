@@ -2,9 +2,12 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  JoinColumn,
+  OneToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
+import { Product } from '../../products/entities/product.entity';
 
 @Entity()
 export class Order {
@@ -32,6 +35,10 @@ export class Order {
     nullable: true,
   })
   completedAt: Date;
+
+  @OneToOne(() => Product)
+  @JoinColumn()
+  product: Product;
 
   @Column('int', { array: true, nullable: true })
   options: number[];
