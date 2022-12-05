@@ -57,6 +57,7 @@ export class ProductsService {
       .leftJoinAndSelect('product.productOptions', 'productOptions')
       .leftJoinAndSelect('productOptions.option', 'optionGroup')
       .leftJoinAndSelect('optionGroup.options', 'options')
+      .orderBy('optionGroup.id', 'DESC')
       .getOne();
   }
 
