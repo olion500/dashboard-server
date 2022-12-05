@@ -35,6 +35,6 @@ lerna-debug.log*
 !.vscode/extensions.json
 
 # Uploaded Image folder for test
-/src/uploads
+/uploads
 
 .env
