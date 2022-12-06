@@ -53,4 +53,48 @@ export class OrdersService {
       completedAt: new Date(),
     });
   }
+
+  async getRotateRate() {
+    const orders = await this.orderRepository
+      .createQueryBuilder('order')
+      .where('order.completedAt is NOT null')
+      .leftJoinAndSelect('order.product', 'products')
+      .getMany();
+
+    const averageMap = new Map<number, any>();
+    for (const order of orders) {
+      const key = order.product.id;
+
+      if (!averageMap.has(key)) {
+        averageMap.set(key, {
+          name: order.product.name,
+          sum: 0,
+          count: 0,
+        });
+      }
+
+      const avg = averageMap.get(key);
+      avg.sum += this.getDayDiff(
+        new Date(order.completedAt),
+        new Date(order.createdAt),
+      );
+      avg.count += 1;
+    }
+
+    const result = [];
+    for (const [key, value] of averageMap.entries()) {
+      result.push({
+        name: value.name,
+        days: value.sum / value.count,
+      });
+    }
+
+    return result;
+  }
+
+  getDayDiff(startDate: Date, endDate: Date): number {
+    const msInDay = 24 * 60 * 60 * 1000;
+
+    return Math.round(Math.abs(Number(endDate) - Number(startDate)) / msInDay);
+  }
 }

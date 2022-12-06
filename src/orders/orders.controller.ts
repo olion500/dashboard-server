@@ -34,6 +34,11 @@ export class OrdersController {
     return this.ordersService.findAll();
   }
 
+  @Get('rotate-rate')
+  getRotateRate() {
+    return this.ordersService.getRotateRate();
+  }
+
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.ordersService.findOne(+id);
