@@ -79,12 +79,21 @@ export class OptionsService {
     return this.optionGroupRepository.delete(id);
   }
 
-  async getConsume(optionId: number) {
+  async calcDailyConsumeAverage(optionId: number) {
     const histories = await this.optionConsumeHistoryRepository.find({
       where: {optionId: optionId}
     })
     const consume = histories.map((history) => history.consume).reduce((a, b) => a + b);
+    const option = await this.findOne(optionId);
 
-    return consume;
+    const getDayDiff = (d1: Date, d2: Date) => {
+      const diff = Math.abs(d1.getTime() - d2.getTime());
+
+      return diff / (1000 * 60 * 60 * 24);
+    }
+
+    const postCreationPeriod = getDayDiff(new Date(), option.createdAt);
+
+    return consume / postCreationPeriod;
   }
 }
