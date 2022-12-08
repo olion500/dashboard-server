@@ -46,6 +46,11 @@ export class OptionsController {
     return this.optionsService.findOneGroup(+id);
   }
 
+  @Get(':id/consume')
+  calcDailyConsumeAverage(@Param('id') id: string) {
+    return this.optionsService.calcDailyConsumeAverage(Number(id));
+  }
+
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateOptionDto: UpdateOptionDto) {
     return this.optionsService.update(+id, updateOptionDto);
