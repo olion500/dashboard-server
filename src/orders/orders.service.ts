@@ -6,6 +6,8 @@ import { Repository } from 'typeorm';
 import { Order } from './entities/order.entity';
 import { fullImagePath } from '../common/utils/image.utils';
 import { Product } from '../products/entities/product.entity';
+import { OptionConsumeHistory } from 'src/options/entities/option_consume_history.entity';
+import { OptionsService } from 'src/options/options.service';
 
 @Injectable()
 export class OrdersService {
@@ -14,6 +16,9 @@ export class OrdersService {
     private orderRepository: Repository<Order>,
     @InjectRepository(Product)
     private readonly productRepository: Repository<Product>,
+    @InjectRepository(OptionConsumeHistory)
+    private readonly optionConsumeHistoryRepository: Repository<OptionConsumeHistory>,
+    private readonly optionsService: OptionsService,
   ) {}
 
   async create(files: Express.Multer.File[], createOrderDto: CreateOrderDto) {
@@ -23,8 +28,30 @@ export class OrdersService {
     initOrder.product = await this.productRepository.findOneBy({
       id: createOrderDto.product_id,
     });
+    const result = await this.orderRepository.save(initOrder);
 
-    return await this.orderRepository.save(initOrder);
+    // Create OptionConsumeHistory
+    const options = await Promise.all(
+      initOrder.options.map((optionId) => {
+        return this.optionsService.findOne(optionId);
+      })
+    );
+
+    const productId = initOrder.product.id
+    await Promise.all(
+      options.map((option) => {
+        const consume = option.optionGroup.productOptions.filter((productOption) => productOption.product.id === productId)[0].consume;
+
+        const initOptionConsumeHistory = new OptionConsumeHistory({
+          productId: productId,
+          optionId: option.id,
+          consume: consume
+        });
+        this.optionConsumeHistoryRepository.save(initOptionConsumeHistory);
+      })
+    )
+
+    return result;
   }
 
   findAll() {
