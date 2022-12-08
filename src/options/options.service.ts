@@ -7,6 +7,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { OptionGroup } from './entities/option_group.entity';
 import { CreateOptionGroupDto } from './dto/create-option-group-dto';
 import { fullImagePath } from '../common/utils/image.utils';
+import { OptionConsumeHistory } from './entities/option_consume_history.entity';
 
 @Injectable()
 export class OptionsService {
@@ -15,6 +16,8 @@ export class OptionsService {
     private optionRepository: Repository<Option>,
     @InjectRepository(OptionGroup)
     private optionGroupRepository: Repository<OptionGroup>,
+    @InjectRepository(OptionConsumeHistory)
+    private optionConsumeHistoryRepository: Repository<OptionConsumeHistory>
   ) {}
 
   async createGroup(createOptionGroupDto: CreateOptionGroupDto) {
@@ -35,6 +38,12 @@ export class OptionsService {
     optionGroup.options.push(option);
 
     return await this.optionGroupRepository.save(optionGroup);
+  }
+
+  findOne(optionId: number) {
+    return this.optionRepository.findOne({
+      where: {id: optionId}
+    });
   }
 
   findAllGroup() {
@@ -68,5 +77,14 @@ export class OptionsService {
 
   removeGroup(id: number) {
     return this.optionGroupRepository.delete(id);
+  }
+
+  async getConsume(optionId: number) {
+    const histories = await this.optionConsumeHistoryRepository.find({
+      where: {optionId: optionId}
+    })
+    const consume = histories.map((history) => history.consume).reduce((a, b) => a + b);
+
+    return consume;
   }
 }
