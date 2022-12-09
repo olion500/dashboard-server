@@ -46,9 +46,9 @@ export class OptionsController {
     return this.optionsService.findOneGroup(+id);
   }
 
-
-  @Get('/stock')
+  @Get('stock')
   getOptionsStock() {
+    // 여기서부터 오류 invalid input syntax for type integer: "NaN"
     return this.optionsService.getOptionsStock();
   }
 
