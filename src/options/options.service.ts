@@ -8,6 +8,7 @@ import { OptionGroup } from './entities/option_group.entity';
 import { CreateOptionGroupDto } from './dto/create-option-group-dto';
 import { fullImagePath } from '../common/utils/image.utils';
 import { OptionConsumeHistory } from './entities/option_consume_history.entity';
+import { OptionsStockDto, OptionStockInfo } from './dto/consume-option.dto';
 
 @Injectable()
 export class OptionsService {
@@ -79,24 +80,61 @@ export class OptionsService {
     return this.optionGroupRepository.delete(id);
   }
 
-  getDayDiff(d1: Date, d2: Date) {
-    const diff = Math.abs(d1.getTime() - d2.getTime());
 
-    return diff / (1000 * 60 * 60 * 24);
-  }
+  async getOptionsStock() {
+    const optionsStock: OptionsStockDto = new OptionsStockDto();
 
-  async calcDailyConsumeAverage(optionId: number) {
-    console.log('calcDailyConsumeAverage');
-    const histories = await this.optionConsumeHistoryRepository.find({
-      where: { optionId },
+    const options = await this.optionRepository.find();
+    options.map((option) =>
+      optionsStock.options.push(
+        new OptionStockInfo({
+          id: option.id,
+          groupName: option.optionGroup.name,
+          name: option.name,
+          count: option.count,
+          createdAt: option.createdAt,
+        }),
+      ),
+    );
+
+    const consumes = new Map<number, number>();
+    const consumeHistories = await this.optionConsumeHistoryRepository.find();
+    consumeHistories.map((history) => {
+      consumes.has(history.optionId)
+        ? consumes.set(
+            history.optionId,
+            consumes.get(history.optionId) + history.consume,
+          )
+        : consumes.set(history.optionId, history.consume);
     });
-    const consume = histories
-      .map((history) => history.consume)
-      .reduce((a, b) => a + b);
-    const option = await this.findOne(optionId);
 
-    const postCreationPeriod = this.getDayDiff(new Date(), option.createdAt);
+    const getDayDiff = (d1: Date, d2: Date) => {
+      const diff = Math.abs(d1.getTime() - d2.getTime());
 
-    return consume / postCreationPeriod;
+      return diff / (1000 * 60 * 60 * 24);
+    };
+
+    optionsStock.options.map((option) => {
+      if (consumes.has(option.id)) {
+        const postOptionCreationPeriod = getDayDiff(
+          new Date(),
+          option.createdAt,
+        );
+        option.dailyConsume = Number(
+          (consumes.get(option.id) / postOptionCreationPeriod).toFixed(1),
+        );
+
+        option.estimatedSoldOut = Number(
+          (option.count / option.dailyConsume).toFixed(1),
+        );
+        option.warningLevel =
+          option.count < 20
+            ? '재고경고'
+            : option.count < 40
+            ? '재고부족'
+            : '여유';
+      }
+    });
+    return optionsStock;
   }
 }

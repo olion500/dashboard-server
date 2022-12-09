@@ -46,9 +46,10 @@ export class OptionsController {
     return this.optionsService.findOneGroup(+id);
   }
 
-  @Get(':id/consume')
-  calcDailyConsumeAverage(@Param('id') id: string) {
-    return this.optionsService.calcDailyConsumeAverage(+id);
+
+  @Get('/stock')
+  getOptionsStock() {
+    return this.optionsService.getOptionsStock();
   }
 
   @Patch(':id')
