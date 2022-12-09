@@ -13,29 +13,27 @@ export class SystemService {
   }
 
   sendKpi1(createKpi1: CreateKpi1Dto) {
-    return this.httpService
-      .post(`${this.KPI_API_HOST}/kpiLv1/kpiLv1InsertTst`, createKpi1)
-      .toPromise()
-      .then((res) => {
-        res.data;
-      });
+    this.httpService.post(
+      `${this.KPI_API_HOST}/kpiLv1/kpiLv1InsertTst`,
+      createKpi1,
+    );
+    this.httpService.post(`${this.KPI_API_HOST}/kpiLv1/save`, createKpi1);
+    return 'success';
   }
 
   sendKpi2(createKpi2: CreateKpi2Dto) {
-    return this.httpService
-      .post(`${this.KPI_API_HOST}/kpiLv2/kpiLv2InsertTst`, createKpi2)
-      .toPromise()
-      .then((res) => {
-        res.data;
-      });
+    this.httpService.post(
+      `${this.KPI_API_HOST}/kpiLv2/kpiLv2InsertTst`,
+      createKpi2,
+    );
+    this.httpService.post(`${this.KPI_API_HOST}/kpiLv2/save`, createKpi2);
   }
 
   sendKpi3(createKpi3: CreateKpi3Dto) {
-    return this.httpService
-      .post(`${this.KPI_API_HOST}/kpiLv3/kpiLv3InsertTst`, createKpi3)
-      .toPromise()
-      .then((res) => {
-        res.data;
-      });
+    this.httpService.post(
+      `${this.KPI_API_HOST}/kpiLv3/kpiLv3InsertTst`,
+      createKpi3,
+    );
+    this.httpService.post(`${this.KPI_API_HOST}/kpiLv3/save`, createKpi3);
   }
 }
