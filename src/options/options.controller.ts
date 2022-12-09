@@ -46,6 +46,12 @@ export class OptionsController {
     return this.optionsService.findOneGroup(+id);
   }
 
+  @Get('stock')
+  getOptionsStock() {
+    // 여기서부터 오류 invalid input syntax for type integer: "NaN"
+    return this.optionsService.getOptionsStock();
+  }
+
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateOptionDto: UpdateOptionDto) {
     return this.optionsService.update(+id, updateOptionDto);
