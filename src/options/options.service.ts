@@ -44,6 +44,21 @@ export class OptionsService {
   findOne(optionId: number) {
     return this.optionRepository.findOne({
       where: { id: optionId },
+      relations: [
+        'optionGroup',
+        'optionGroup.productOptions',
+        'optionGroup.productOptions.product',
+      ],
+    });
+  }
+
+  findAll() {
+    return this.optionRepository.find({
+      relations: [
+        'optionGroup',
+        'optionGroup.productOptions',
+        'optionGroup.productOptions.product',
+      ],
     });
   }
 
@@ -84,7 +99,7 @@ export class OptionsService {
   async getOptionsStock() {
     const optionsStock: OptionsStockDto = new OptionsStockDto();
 
-    const options = await this.optionRepository.find();
+    const options = await this.findAll();
     options.map((option) =>
       optionsStock.options.push(
         new OptionStockInfo({
@@ -99,6 +114,7 @@ export class OptionsService {
 
     const consumes = new Map<number, number>();
     const consumeHistories = await this.optionConsumeHistoryRepository.find();
+
     consumeHistories.map((history) => {
       consumes.has(history.optionId)
         ? consumes.set(
@@ -135,6 +151,7 @@ export class OptionsService {
             : '여유';
       }
     });
+
     return optionsStock;
   }
 }
