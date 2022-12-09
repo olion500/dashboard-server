@@ -9,6 +9,7 @@ import { OptionsModule } from './options/options.module';
 import { ProductsModule } from './products/products.module';
 import { SeedsModule } from './seeds/seeds.module';
 import { OrdersModule } from './orders/orders.module';
+import { SystemModule } from './system/system.module';
 
 @Module({
   imports: [
@@ -21,6 +22,7 @@ import { OrdersModule } from './orders/orders.module';
     ProductsModule,
     SeedsModule,
     OrdersModule,
+    SystemModule,
   ],
   controllers: [AppController],
   providers: [AppService],

@@ -26,6 +26,7 @@
     "migrate:destroy": "npm run build && npm run typeorm migration:revert && rimraf src/app/database/migrations"
   },
   "dependencies": {
+    "@nestjs/axios": "^1.0.0",
     "@nestjs/common": "^9.0.0",
     "@nestjs/config": "^2.2.0",
     "@nestjs/core": "^9.0.0",
