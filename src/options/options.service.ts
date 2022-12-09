@@ -17,7 +17,7 @@ export class OptionsService {
     @InjectRepository(OptionGroup)
     private optionGroupRepository: Repository<OptionGroup>,
     @InjectRepository(OptionConsumeHistory)
-    private optionConsumeHistoryRepository: Repository<OptionConsumeHistory>
+    private optionConsumeHistoryRepository: Repository<OptionConsumeHistory>,
   ) {}
 
   async createGroup(createOptionGroupDto: CreateOptionGroupDto) {
@@ -42,7 +42,7 @@ export class OptionsService {
 
   findOne(optionId: number) {
     return this.optionRepository.findOne({
-      where: {id: optionId}
+      where: { id: optionId },
     });
   }
 
@@ -79,20 +79,23 @@ export class OptionsService {
     return this.optionGroupRepository.delete(id);
   }
 
+  getDayDiff(d1: Date, d2: Date) {
+    const diff = Math.abs(d1.getTime() - d2.getTime());
+
+    return diff / (1000 * 60 * 60 * 24);
+  }
+
   async calcDailyConsumeAverage(optionId: number) {
+    console.log('calcDailyConsumeAverage');
     const histories = await this.optionConsumeHistoryRepository.find({
-      where: {optionId: optionId}
-    })
-    const consume = histories.map((history) => history.consume).reduce((a, b) => a + b);
+      where: { optionId },
+    });
+    const consume = histories
+      .map((history) => history.consume)
+      .reduce((a, b) => a + b);
     const option = await this.findOne(optionId);
 
-    const getDayDiff = (d1: Date, d2: Date) => {
-      const diff = Math.abs(d1.getTime() - d2.getTime());
-
-      return diff / (1000 * 60 * 60 * 24);
-    }
-
-    const postCreationPeriod = getDayDiff(new Date(), option.createdAt);
+    const postCreationPeriod = this.getDayDiff(new Date(), option.createdAt);
 
     return consume / postCreationPeriod;
   }

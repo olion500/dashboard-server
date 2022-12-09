@@ -48,7 +48,7 @@ export class OptionsController {
 
   @Get(':id/consume')
   calcDailyConsumeAverage(@Param('id') id: string) {
-    return this.optionsService.calcDailyConsumeAverage(Number(id));
+    return this.optionsService.calcDailyConsumeAverage(+id);
   }
 
   @Patch(':id')
