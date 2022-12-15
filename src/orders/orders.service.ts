@@ -123,4 +123,34 @@ export class OrdersService {
 
     return Math.round(Math.abs(Number(endDate) - Number(startDate)) / msInDay);
   }
+
+  async getStocks() {
+    const options = await this.optionService.findAll();
+    const optionConsumeHistory = await this.optionConsumeHistoryRepository
+      .createQueryBuilder('och')
+      .leftJoinAndSelect('och.option', 'option')
+      .select('SUM(och.consume)', 'sum')
+      .addSelect('option.id', 'optionId')
+      .groupBy('option.id')
+      .getRawMany();
+
+    return options.map((option) => {
+      let dailyConsumeAvg = 0;
+
+      for (const och of optionConsumeHistory) {
+        if (och.optionId === option.id) {
+          const days = this.getDayDiff(new Date(option.createdAt), new Date());
+          if (days !== 0) {
+            dailyConsumeAvg = Number(och.sum) / days;
+            dailyConsumeAvg = Math.trunc(dailyConsumeAvg);
+          }
+        }
+      }
+      return {
+        ...option,
+        dailyConsumeAvg,
+        expectedFinalConsume: Math.trunc(option.count / dailyConsumeAvg) || 0,
+      };
+    });
+  }
 }

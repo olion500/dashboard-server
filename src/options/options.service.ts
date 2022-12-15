@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { CreateOptionDto } from './dto/create-option.dto';
 import { UpdateOptionDto } from './dto/update-option.dto';
-import { Repository } from 'typeorm';
+import { In, Not, Repository } from 'typeorm';
 import { Option } from './entities/option.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { OptionGroup } from './entities/option_group.entity';
@@ -38,6 +38,17 @@ export class OptionsService {
     optionGroup.options.push(option);
 
     return await this.optionGroupRepository.save(optionGroup);
+  }
+
+  findAll() {
+    // NOTE: except 글씨체, 글자색상
+    return this.optionRepository.find({
+      where: {
+        optionGroup: {
+          name: Not(In(['글씨체', '글자색상'])),
+        },
+      },
+    });
   }
 
   findAllGroup() {

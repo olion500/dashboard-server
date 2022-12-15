@@ -13,7 +13,7 @@ import {
 import { OrdersService } from './orders.service';
 import { CreateOrderDto } from './dto/create-order.dto';
 import { UpdateOrderDto } from './dto/update-order.dto';
-import { FileInterceptor, FilesInterceptor } from '@nestjs/platform-express';
+import { FilesInterceptor } from '@nestjs/platform-express';
 import { multerOptions } from '../common/utils/image.utils';
 
 @Controller('orders')
@@ -39,8 +39,16 @@ export class OrdersController {
     return this.ordersService.getRotateRate();
   }
 
+  @Get('stocks')
+  getStocks() {
+    // console.log('stocks');
+    // return 'stocks';
+    return this.ordersService.getStocks();
+  }
+
   @Get(':id')
   findOne(@Param('id') id: string) {
+    console.log('findOne');
     return this.ordersService.findOne(+id);
   }
 
