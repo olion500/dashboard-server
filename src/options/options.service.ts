@@ -48,6 +48,9 @@ export class OptionsService {
           name: Not(In(['글씨체', '글자색상'])),
         },
       },
+      relations: {
+        optionGroup: true,
+      },
     });
   }
 
