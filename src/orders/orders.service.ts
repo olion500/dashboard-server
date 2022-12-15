@@ -136,7 +136,9 @@ export class OrdersService {
 
     return options.map((option) => {
       let dailyConsumeAvg = 0;
+      let expectedFinalConsume = 0;
 
+      // 일평균소진
       for (const och of optionConsumeHistory) {
         if (och.optionId === option.id) {
           const days = this.getDayDiff(new Date(option.createdAt), new Date());
@@ -146,10 +148,16 @@ export class OrdersService {
           }
         }
       }
+
+      // 소진예상일
+      if (dailyConsumeAvg !== 0) {
+        expectedFinalConsume = Number(option.count) / dailyConsumeAvg;
+      }
+
       return {
         ...option,
         dailyConsumeAvg,
-        expectedFinalConsume: Math.trunc(option.count / dailyConsumeAvg) || 0,
+        expectedFinalConsume,
       };
     });
   }
