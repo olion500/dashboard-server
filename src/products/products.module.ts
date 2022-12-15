@@ -10,5 +10,6 @@ import { OptionsModule } from '../options/options.module';
   imports: [OptionsModule, TypeOrmModule.forFeature([Product, ProductOption])],
   controllers: [ProductsController],
   providers: [ProductsService],
+  exports: [ProductsService],
 })
 export class ProductsModule {}

@@ -7,6 +7,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { OptionGroup } from './entities/option_group.entity';
 import { CreateOptionGroupDto } from './dto/create-option-group-dto';
 import { fullImagePath } from '../common/utils/image.utils';
+import { ProductOption } from '../products/entities/product_option.entity';
 
 @Injectable()
 export class OptionsService {
@@ -15,6 +16,8 @@ export class OptionsService {
     private optionRepository: Repository<Option>,
     @InjectRepository(OptionGroup)
     private optionGroupRepository: Repository<OptionGroup>,
+    @InjectRepository(ProductOption)
+    private readonly productOptionRepository: Repository<ProductOption>,
   ) {}
 
   async createGroup(createOptionGroupDto: CreateOptionGroupDto) {
@@ -48,6 +51,26 @@ export class OptionsService {
       where: { id: optionGroupId },
       relations: { options: true },
     });
+  }
+
+  findManyOption(optionIdList: number[]): Promise<Option[]> {
+    return Promise.all(
+      optionIdList.map((optionId) => {
+        return this.optionRepository.findOne({
+          where: { id: optionId },
+          relations: { optionGroup: true },
+        });
+      }),
+    );
+  }
+
+  findOptionGroupByOption(optionId: number): Promise<OptionGroup> {
+    return this.optionRepository
+      .findOne({
+        where: { id: optionId },
+        relations: { optionGroup: true },
+      })
+      .then((option) => option.optionGroup);
   }
 
   findFontColorGroup() {

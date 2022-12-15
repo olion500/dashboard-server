@@ -61,6 +61,20 @@ export class ProductsService {
       .getOne();
   }
 
+  async findProductOption(
+    productId: number,
+    optionId: number,
+  ): Promise<ProductOption> {
+    const product = await this.findOne(productId);
+    const option = await this.optionsService.findOptionGroupByOption(optionId);
+    return await this.productOptionRepository.findOne({
+      where: {
+        option: { id: option.id },
+        product: { id: product.id },
+      },
+    });
+  }
+
   update(id: number, updateProductDto: UpdateProductDto) {
     return this.productRepository.update(id, updateProductDto);
   }

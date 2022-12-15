@@ -5,26 +5,52 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Order } from './entities/order.entity';
 import { fullImagePath } from '../common/utils/image.utils';
-import { Product } from '../products/entities/product.entity';
+import { OptionConsumeHistory } from './entities/option_consume_history.entity';
+import { ProductsService } from '../products/products.service';
+import { OptionsService } from '../options/options.service';
 
 @Injectable()
 export class OrdersService {
   constructor(
     @InjectRepository(Order)
     private orderRepository: Repository<Order>,
-    @InjectRepository(Product)
-    private readonly productRepository: Repository<Product>,
+    @InjectRepository(OptionConsumeHistory)
+    private optionConsumeHistoryRepository: Repository<OptionConsumeHistory>,
+    private readonly productService: ProductsService,
+    private readonly optionService: OptionsService,
   ) {}
 
   async create(files: Express.Multer.File[], createOrderDto: CreateOrderDto) {
+    const product = await this.productService.findOne(
+      createOrderDto.product_id,
+    );
+    const options = await this.optionService.findManyOption(
+      createOrderDto.options,
+    );
+
+    // create order
     const initOrder = new Order(createOrderDto);
     initOrder.images = files.map((f) => fullImagePath('orders', f.filename));
+    initOrder.product = product;
+    const createOrderResult = await this.orderRepository.save(initOrder);
 
-    initOrder.product = await this.productRepository.findOneBy({
-      id: createOrderDto.product_id,
-    });
+    // for all options selected by the order
+    for (const option of options) {
+      const productOption = await this.productService.findProductOption(
+        product.id,
+        option.id,
+      );
 
-    return await this.orderRepository.save(initOrder);
+      // create option consume history
+      const initOptionConsumeHistory = new OptionConsumeHistory({
+        product,
+        option,
+        consume: productOption.consume,
+      });
+      this.optionConsumeHistoryRepository.save(initOptionConsumeHistory);
+    }
+
+    return createOrderResult;
   }
 
   findAll() {
