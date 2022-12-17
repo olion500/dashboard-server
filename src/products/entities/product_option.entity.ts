@@ -29,6 +29,14 @@ export class ProductOption {
   })
   option: OptionGroup;
 
+  @Column({
+    default: true,
+  })
+  enabled: boolean;
+
+  @Column('int', { array: true, default: [] })
+  enabledOptions: number[];
+
   @CreateDateColumn()
   createdAt: Date;
 

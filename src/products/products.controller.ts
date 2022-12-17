@@ -15,6 +15,7 @@ import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { multerOptions } from '../common/utils/image.utils';
+import { UpdateProductOptionDto } from './dto/update-product-option.dto';
 
 @Controller('products')
 export class ProductsController {
@@ -47,5 +48,16 @@ export class ProductsController {
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.productsService.remove(+id);
+  }
+
+  @Patch('/options/:id')
+  updateProductOption(
+    @Param('id') id: string,
+    @Body() updateProductOptionDto: UpdateProductOptionDto,
+  ) {
+    return this.productsService.updateProductOption(
+      +id,
+      updateProductOptionDto,
+    );
   }
 }

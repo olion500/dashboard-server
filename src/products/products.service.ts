@@ -7,6 +7,7 @@ import { Product } from './entities/product.entity';
 import { fullImagePath } from '../common/utils/image.utils';
 import { ProductOption } from './entities/product_option.entity';
 import { OptionsService } from '../options/options.service';
+import { UpdateProductOptionDto } from './dto/update-product-option.dto';
 
 @Injectable()
 export class ProductsService {
@@ -77,6 +78,13 @@ export class ProductsService {
 
   update(id: number, updateProductDto: UpdateProductDto) {
     return this.productRepository.update(id, updateProductDto);
+  }
+
+  updateProductOption(
+    poid: number,
+    updateProductOptionDto: UpdateProductOptionDto,
+  ) {
+    return this.productOptionRepository.update(poid, updateProductOptionDto);
   }
 
   remove(id: number) {
